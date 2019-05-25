@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace EntityWorld.Host
+namespace EntityWorld
 {
     public class WorldCreationContext
     {

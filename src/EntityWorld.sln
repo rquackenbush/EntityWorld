@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityWorld.Host", "EntityWorld.Host\EntityWorld.Host.csproj", "{8AC7620F-F4B2-46CE-9346-4D3B1FC4E692}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityWorld", "EntityWorld\EntityWorld.csproj", "{EF370A50-D709-48CC-A2CD-4FE6D8723F45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityWorld.Tests", "EntityWorld.Tests\EntityWorld.Tests.csproj", "{2E7A2518-5514-484B-9AEC-CBFE39068E6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{8AC7620F-F4B2-46CE-9346-4D3B1FC4E692}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AC7620F-F4B2-46CE-9346-4D3B1FC4E692}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AC7620F-F4B2-46CE-9346-4D3B1FC4E692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF370A50-D709-48CC-A2CD-4FE6D8723F45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF370A50-D709-48CC-A2CD-4FE6D8723F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF370A50-D709-48CC-A2CD-4FE6D8723F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF370A50-D709-48CC-A2CD-4FE6D8723F45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7A2518-5514-484B-9AEC-CBFE39068E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7A2518-5514-484B-9AEC-CBFE39068E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7A2518-5514-484B-9AEC-CBFE39068E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7A2518-5514-484B-9AEC-CBFE39068E6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

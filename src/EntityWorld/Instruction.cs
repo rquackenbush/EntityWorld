@@ -1,4 +1,4 @@
-namespace EntityWorld.Host
+namespace EntityWorld
 {
     public enum Instruction
     {

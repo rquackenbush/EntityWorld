@@ -1,33 +1,35 @@
 using System;
 using System.Drawing;
+using EntityWorld.Interfaces;
 
-namespace EntityWorld.Host
+namespace EntityWorld
 {
     public class Entity
     {
+        private readonly WorldCreationParameters _parameters;
         private int _instructionIndex;
         private readonly int _maxFood;
 
-        public Entity(World world, WorldCreationContext context, EntityMetadata metadata)
+        public Entity(IRandomNumberGenerator randomNumberGenerator, WorldState worldState, WorldCreationParameters parameters, EntityMetadata metadata)
         {
-            //Start out with a full stomach
-            FoodLevel = context.MaxFood;
+            WorldState = worldState ?? throw new ArgumentNullException(nameof(worldState));
+            _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
 
-            //Save a reference to the world
-            World = world;
-            Metadata = metadata;
+            //Start out with a full stomach
+            FoodLevel = parameters.MaxFood;
 
             //Create the position of this entity
-            var x = context.Random.Next(0, context.WorldSize.Width);
-            var y = context.Random.Next(0, context.WorldSize.Height);
+            var x = randomNumberGenerator.Next(0, parameters.WorldSize.Width);
+            var y = randomNumberGenerator.Next(0, parameters.WorldSize.Height);
 
             //Get the start position
             StartPosition = Position = new Point(x, y);
 
-            _maxFood = context.MaxFood;
+            _maxFood = parameters.MaxFood;
         }
 
-        public World World { get; }
+        public WorldState WorldState { get; }
 
         public EntityMetadata Metadata { get; }
 
@@ -80,7 +82,7 @@ namespace EntityWorld.Host
 
                 case Instruction.SkipIfFoodDown:
 
-                    if (World.IsFoodDown(Position))
+                    if (WorldState.Food.IsPointBelow(Position))
                     {
                         _instructionIndex++;
                     }
@@ -89,7 +91,7 @@ namespace EntityWorld.Host
 
                 case Instruction.SkipIfFoodLeft:
 
-                    if (World.IsFoodLeft(Position))
+                    if (WorldState.Food.IsPointLeft(Position))
                     {
                         _instructionIndex++;
                     }
@@ -98,7 +100,7 @@ namespace EntityWorld.Host
 
                 case Instruction.SkipIfFoodRight:
 
-                    if (World.IsFoodRight(Position))
+                    if (WorldState.Food.IsPointRight(Position))
                     {
                         _instructionIndex++;
                     }
@@ -107,7 +109,7 @@ namespace EntityWorld.Host
 
                 case Instruction.SkipIfFoodUp:
 
-                    if (World.IsFoodUp(Position))
+                    if (WorldState.Food.IsPointAbove(Position))
                     {
                         _instructionIndex++;
                     }
@@ -133,7 +135,7 @@ namespace EntityWorld.Host
         private void ProcessFood()
         {
             //Determine if we're in the food zone
-            var isInFood = World.Food.Contains(Position);
+            var isInFood = WorldState.Food.Contains(Position);
 
             if (isInFood)
             {

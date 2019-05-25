@@ -21,9 +21,30 @@ namespace EntityWorld.Host
                 Console.WriteLine("Cancellation requested...");
             };
 
+            //Create the random number generator
+            var randomNumberGenerator = new RandomNumberGenerator();
+
+            //Create the world factory
+            var worldFactory = new WorldFactory(randomNumberGenerator);
+
+            Entity[] survivingEntities = null;
+
             for (int generationIndex = 0; generationIndex < 100; generationIndex++)
             {
                 Console.WriteLine($"=== Generation {generationIndex} ===");
+
+                var parameters = new WorldCreationParameters
+                {
+                    ExistingEntities = survivingEntities?
+                        .Select(e => e.Metadata)
+                        .ToArray(),
+                    NumberOfEntities = 5000
+                };
+
+                //Create the world
+                var world = worldFactory.Create(parameters);
+
+                Console.WriteLine($"World created. Food location: ({world.WorldState.Food.X}, {world.WorldState.Food.Y})");
 
                 if (_cts.IsCancellationRequested)
                 {
@@ -32,30 +53,32 @@ namespace EntityWorld.Host
                     return;
                 }
 
-                var entities = await ExecuteGenerationAsync(new EntityMetadata[]{}, _cts.Token);
+                survivingEntities = await ExecuteGenerationAsync(world, _cts.Token);
+
+                //Print out the survivors
+                if (survivingEntities != null)
+                {
+                    foreach (var aliveEntity in survivingEntities)
+                    {
+                        var distance = aliveEntity.StartPosition.GetDistance(aliveEntity.Position);
+
+                        Console.WriteLine($"  Entity traveled {distance:0.00}: Gen [{aliveEntity.Metadata.Generation}]");
+                    }
+                }
             }
+            
         }
 
-        static async Task<EntityMetadata[]> ExecuteGenerationAsync(EntityMetadata[] entityMetadatas, CancellationToken token)
+        static async Task<Entity[]> ExecuteGenerationAsync(World world, CancellationToken token)
         {
-            //The size of the world
-            var worldSize = new Size(800, 600);
-
-            //The position of the food
-            var food = new Rectangle(100, 100, 20, 20);
-
-            var context = new WorldCreationContext(1000, 20, worldSize, 1000, food);
-
-            Console.WriteLine("World created");
-
-            //Create the world
-            var world = new World(context);
-
             //Cycle the world
-            for (int cycleIndex = 0; cycleIndex < 1000; cycleIndex++)
+            for (int cycleIndex = 0; cycleIndex < 2000; cycleIndex++)
             {
+                //Check to see if we've cancelled
+                token.ThrowIfCancellationRequested();
+
                 //Perform a cycle
-                await world.CycleAsync();
+                await world.CycleAsync(token);
             }
 
             //Get the number of alive entities
@@ -71,15 +94,7 @@ namespace EntityWorld.Host
 
             //Return the alive entities metadata!
             return aliveEntities
-                .Select(e => e.Metadata)
                 .ToArray();
-
-//            foreach (var aliveEntity in aliveEntities)
-//            {
-//                var distance = aliveEntity.StartPosition.GetDistance(aliveEntity.Position);
-//
-//                Console.WriteLine($"  Entity traveled {distance:0.00}");
-//            }
         }
 
     }
