@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using ReactiveUI;
 
@@ -8,26 +6,47 @@ namespace EntityWorld.Desktop.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string _greeting = "Hello World!";
+        private WorldViewModel _world;
 
         public MainWindowViewModel()
         {
+            var randomNumberGenerator = new RandomNumberGenerator();
+
+            var parameters = new WorldCreationParameters
+            {
+                NumberOfEntities = 10
+            };
+
+            var factory = new WorldFactory(randomNumberGenerator);
+
+            var world = factory.Create(parameters);
+
+            World = new WorldViewModel(world);
+
             RunCommand = ReactiveCommand.Create(Run);
         }
 
         public ICommand RunCommand { get; }
 
-        private void Run()
+        private async void Run()
         {
-            Greeting = "Running";
+            for (int iteration = 0; iteration < 10; iteration++)
+            {
+                await World.World.CycleAsync();
+            }
+
+            foreach (var entity in World.Entities)
+            {
+                entity.UpdateLocation();
+            }
         }
 
-        public string Greeting
+        public WorldViewModel World
         {
-            get => _greeting;
+            get => _world;
             set
             {
-                _greeting = value;
+                _world = value;
                 this.RaisePropertyChanged();
             }
         }

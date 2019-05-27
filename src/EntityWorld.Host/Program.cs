@@ -38,7 +38,8 @@ namespace EntityWorld.Host
                     ExistingEntities = survivingEntities?
                         .Select(e => e.Metadata)
                         .ToArray(),
-                    NumberOfEntities = 5000
+                    NumberOfEntities = 1000,
+                    NumberOfInstructions = 8
                 };
 
                 //Create the world
@@ -72,7 +73,7 @@ namespace EntityWorld.Host
         static async Task<Entity[]> ExecuteGenerationAsync(World world, CancellationToken token)
         {
             //Cycle the world
-            for (int cycleIndex = 0; cycleIndex < 2000; cycleIndex++)
+            for (int cycleIndex = 0; cycleIndex < 2600; cycleIndex++)
             {
                 //Check to see if we've cancelled
                 token.ThrowIfCancellationRequested();

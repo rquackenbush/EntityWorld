@@ -110,31 +110,31 @@ namespace EntityWorld
 
         private Instruction[] GenerateInstructions(WorldCreationParameters parameters)
         {
-//            var instructions = new Instruction[parameters.NumberOfInstructions];
+            var instructions = new Instruction[parameters.NumberOfInstructions];
+
+            //Create the instructions
+            for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
+            {
+                //Create the instruction
+                instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.DoIfFoodRight + 1);
+            }
+
+            return instructions;
+
+//              return new []
+//              {
+//                  Instruction.DoIfFoodDown,
+//                  Instruction.GoDown,
 //
-//            //Create the instructions
-//            for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
-//            {
-//                //Create the instruction
-//                instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.DoIfFoodRight + 1);
-//            }
+//                  Instruction.DoIfFoodUp,
+//                  Instruction.GoUp,
 //
-//            return instructions;
-
-              return new []
-              {
-                  Instruction.DoIfFoodDown,
-                  Instruction.GoDown,
-
-                  Instruction.DoIfFoodUp,
-                  Instruction.GoUp,
-
-                  Instruction.DoIfFoodLeft,
-                  Instruction.GoLeft,
-
-                  Instruction.DoIfFoodRight,
-                  Instruction.GoRight
-              };
+//                  Instruction.DoIfFoodLeft,
+//                  Instruction.GoLeft,
+//
+//                  Instruction.DoIfFoodRight,
+//                  Instruction.GoRight
+//              };
         }
     }
 }

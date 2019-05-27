@@ -3,12 +3,41 @@
         xmlns:vm="clr-namespace:EntityWorld.Desktop.ViewModels;assembly=EntityWorld.Desktop"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ViewModels="clr-namespace:EntityWorld.Desktop.ViewModels"
+        xmlns:Converters="clr-namespace:EntityWorld.Desktop.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="1000"
         Height="800"
         x:Class="EntityWorld.Desktop.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="EntityWorld.Desktop">
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="F5"
+                    Command="{Binding Path=RunCommand}" />
+    </Window.KeyBindings>
+
+    <Window.Resources>
+        <Converters:EntityLocationConverter x:Key="EntityLocationConverter"/>
+
+    </Window.Resources>
+
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type ViewModels:EntityViewModel}">
+            <StackPanel Orientation="Horizontal" Margin="{Binding Path=Location, Converter={StaticResource EntityLocationConverter}}">
+                <Rectangle
+                    Width="10"
+                    Height="10"
+                    Stroke="Black"
+                    Fill="White"
+                    StrokeThickness="1">
+                </Rectangle>
+                <TextBlock Text="{Binding Path=FoodLevel}"/>
+            </StackPanel>
+
+
+        </DataTemplate>
+    </Window.DataTemplates>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -26,9 +55,17 @@
             </MenuItem>
         </Menu>
 
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl Items="{Binding Path=World.Entities}" Width="{Binding Path=World.Size.Width}" Height="{Binding Path=World.Size.Height}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding Path=World.Size.Width}" Height="{Binding Path=World.Size.Height}" Background="Red" >
+                             <Rectangle Canvas.Left="{Binding Path=World.Food.Left}" Canvas.Top="{Binding Path=World.Food.Top}" Stroke="Yellow" StrokeThickness="1" Width="{Binding Path=World.Food.Width}" Height="{Binding Path=World.Food.Height}"></Rectangle>
+                        </Canvas>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-        <TextBlock Grid.Row="1" Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
-
 </Window>

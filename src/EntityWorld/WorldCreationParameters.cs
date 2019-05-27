@@ -12,7 +12,7 @@ namespace EntityWorld
         /// <summary>
         /// The size of the world
         /// </summary>
-        public Size WorldSize { get; set; } = new Size(800, 600);
+        public Size WorldSize { get; set; } = new Size(500, 500);
 
         /// <summary>
         /// The total number of entities (including existing entities) that should be created.
@@ -27,7 +27,7 @@ namespace EntityWorld
         /// <summary>
         /// The maximum amount of food each entity can hold.
         /// </summary>
-        public int MaxFood { get; set; } = 1000;
+        public int MaxFood { get; set; } = 2500;
 
         /// <summary>
         /// The size of the food area.

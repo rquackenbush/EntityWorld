@@ -77,7 +77,7 @@ namespace EntityWorld
 
                 case Instruction.DoIfFoodDown:
 
-                    if (!WorldState.Food.IsPointBelow(Location))
+                    if (!WorldState.Food.IsRectangleBelow(Location))
                     {
                         _instructionIndex++;
                     }
@@ -86,7 +86,7 @@ namespace EntityWorld
 
                 case Instruction.DoIfFoodLeft:
 
-                    if (!WorldState.Food.IsPointLeft(Location))
+                    if (!WorldState.Food.IsRectangleLeft(Location))
                     {
                         _instructionIndex++;
                     }
@@ -95,7 +95,7 @@ namespace EntityWorld
 
                 case Instruction.DoIfFoodRight:
 
-                    if (!WorldState.Food.IsPointRight(Location))
+                    if (!WorldState.Food.IsRectangleRight(Location))
                     {
                         _instructionIndex++;
                     }
@@ -104,7 +104,7 @@ namespace EntityWorld
 
                 case Instruction.DoIfFoodUp:
 
-                    if (!WorldState.Food.IsPointAbove(Location))
+                    if (!WorldState.Food.IsRectangleAbove(Location))
                     {
                         _instructionIndex++;
                     }

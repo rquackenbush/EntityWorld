@@ -15,7 +15,7 @@ namespace EntityWorld.Tests
         public void IsAbovePositiveTests(int x, int y)
         {
             _rectangle
-                .IsPointAbove(new Point(x, y))
+                .IsRectangleAbove(new Point(x, y))
                 .ShouldBeTrue();
         }
 
@@ -25,7 +25,7 @@ namespace EntityWorld.Tests
         public void IsAboveNegativeTests(int x, int y)
         {
             _rectangle
-                .IsPointAbove(new Point(x, y))
+                .IsRectangleAbove(new Point(x, y))
                 .ShouldBeFalse();
         }
 
@@ -36,7 +36,7 @@ namespace EntityWorld.Tests
         public void IsBelowPositiveTests(int x, int y)
         {
             _rectangle
-                .IsPointBelow(new Point(x, y))
+                .IsRectangleBelow(new Point(x, y))
                 .ShouldBeTrue();
         }
     }
