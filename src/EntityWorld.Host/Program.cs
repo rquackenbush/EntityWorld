@@ -60,13 +60,13 @@ namespace EntityWorld.Host
                 {
                     foreach (var aliveEntity in survivingEntities)
                     {
-                        var distance = aliveEntity.StartPosition.GetDistance(aliveEntity.Position);
+                        var distance = aliveEntity.StartLocation.GetDistance(aliveEntity.Location);
 
                         Console.WriteLine($"  Entity traveled {distance:0.00}: Gen [{aliveEntity.Metadata.Generation}]");
                     }
                 }
             }
-            
+
         }
 
         static async Task<Entity[]> ExecuteGenerationAsync(World world, CancellationToken token)
@@ -93,8 +93,7 @@ namespace EntityWorld.Host
             Console.WriteLine($"Out of {world.Entities.Length} entities, {aliveEntities.Length} are alive and {deadCount} are dead.");
 
             //Return the alive entities metadata!
-            return aliveEntities
-                .ToArray();
+            return aliveEntities;
         }
 
     }

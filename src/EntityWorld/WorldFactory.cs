@@ -31,6 +31,15 @@ namespace EntityWorld
             return new World(worldState, entities);
         }
 
+        private Point GenerateEntityLocation(WorldCreationParameters parameters)
+        {
+            //Create the position of this entity
+            var x = _randomNumberGenerator.Next(0, parameters.WorldSize.Width);
+            var y = _randomNumberGenerator.Next(0, parameters.WorldSize.Height);
+
+            return new Point(x, y);
+        }
+
         private Entity[] CreateEntities(WorldCreationParameters parameters, WorldState worldState)
         {
             //Allocate space to store the entities.
@@ -46,7 +55,7 @@ namespace EntityWorld
                     existingEntity.Generation++;
 
                     //Create the entity to wrap the metadata
-                    var entity = new Entity(_randomNumberGenerator, worldState, parameters, existingEntity);
+                    var entity = new Entity(worldState, parameters, existingEntity, GenerateEntityLocation(parameters));
 
                     //Add it to the list
                     entities.Add(entity);
@@ -68,18 +77,12 @@ namespace EntityWorld
                 var metadata = new EntityMetadata
                 {
                     Generation = 0,
-                    Instructions = new Instruction[parameters.NumberOfInstructions]
+                    Instructions = GenerateInstructions(parameters)
                 };
 
-                //Create the instructions
-                for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
-                {
-                    //Create the instruction
-                    metadata.Instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.SkipIfFoodRight);
-                }
 
                 //Create the entity
-                var entity = new Entity(_randomNumberGenerator, worldState, parameters, metadata);
+                var entity = new Entity(worldState, parameters, metadata, GenerateEntityLocation(parameters));
 
                 entities.Add(entity);
             }
@@ -103,6 +106,35 @@ namespace EntityWorld
             var foodY = _randomNumberGenerator.Next(0, yMax);
 
             return new Rectangle(new Point(foodX, foodY), parameters.FoodSize);
+        }
+
+        private Instruction[] GenerateInstructions(WorldCreationParameters parameters)
+        {
+//            var instructions = new Instruction[parameters.NumberOfInstructions];
+//
+//            //Create the instructions
+//            for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
+//            {
+//                //Create the instruction
+//                instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.DoIfFoodRight + 1);
+//            }
+//
+//            return instructions;
+
+              return new []
+              {
+                  Instruction.DoIfFoodDown,
+                  Instruction.GoDown,
+
+                  Instruction.DoIfFoodUp,
+                  Instruction.GoUp,
+
+                  Instruction.DoIfFoodLeft,
+                  Instruction.GoLeft,
+
+                  Instruction.DoIfFoodRight,
+                  Instruction.GoRight
+              };
         }
     }
 }

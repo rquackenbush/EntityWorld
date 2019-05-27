@@ -6,25 +6,20 @@ namespace EntityWorld
 {
     public class Entity
     {
-        private readonly WorldCreationParameters _parameters;
         private int _instructionIndex;
         private readonly int _maxFood;
 
-        public Entity(IRandomNumberGenerator randomNumberGenerator, WorldState worldState, WorldCreationParameters parameters, EntityMetadata metadata)
+        public Entity(WorldState worldState, WorldCreationParameters parameters, EntityMetadata metadata, Point location)
         {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             WorldState = worldState ?? throw new ArgumentNullException(nameof(worldState));
-            _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
             Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
 
             //Start out with a full stomach
             FoodLevel = parameters.MaxFood;
 
-            //Create the position of this entity
-            var x = randomNumberGenerator.Next(0, parameters.WorldSize.Width);
-            var y = randomNumberGenerator.Next(0, parameters.WorldSize.Height);
-
             //Get the start position
-            StartPosition = Position = new Point(x, y);
+            StartLocation = Location = location;
 
             _maxFood = parameters.MaxFood;
         }
@@ -80,36 +75,36 @@ namespace EntityWorld
                     delta = new Size(0, -1);
                     break;
 
-                case Instruction.SkipIfFoodDown:
+                case Instruction.DoIfFoodDown:
 
-                    if (WorldState.Food.IsPointBelow(Position))
+                    if (!WorldState.Food.IsPointBelow(Location))
                     {
                         _instructionIndex++;
                     }
 
                     break;
 
-                case Instruction.SkipIfFoodLeft:
+                case Instruction.DoIfFoodLeft:
 
-                    if (WorldState.Food.IsPointLeft(Position))
+                    if (!WorldState.Food.IsPointLeft(Location))
                     {
                         _instructionIndex++;
                     }
 
                     break;
 
-                case Instruction.SkipIfFoodRight:
+                case Instruction.DoIfFoodRight:
 
-                    if (WorldState.Food.IsPointRight(Position))
+                    if (!WorldState.Food.IsPointRight(Location))
                     {
                         _instructionIndex++;
                     }
 
                     break;
 
-                case Instruction.SkipIfFoodUp:
+                case Instruction.DoIfFoodUp:
 
-                    if (WorldState.Food.IsPointAbove(Position))
+                    if (!WorldState.Food.IsPointAbove(Location))
                     {
                         _instructionIndex++;
                     }
@@ -128,14 +123,14 @@ namespace EntityWorld
 
             if (delta != null)
             {
-                Position += delta.Value;
+                Location += delta.Value;
             }
         }
 
         private void ProcessFood()
         {
             //Determine if we're in the food zone
-            var isInFood = WorldState.Food.Contains(Position);
+            var isInFood = WorldState.Food.Contains(Location);
 
             if (isInFood)
             {
@@ -155,9 +150,9 @@ namespace EntityWorld
 
         public int FoodLevel { get; private set; }
 
-        public Point StartPosition { get; }
+        public Point StartLocation { get; }
 
-        public Point Position { get; private set; }
+        public Point Location { get; private set; }
 
         /// <summary>
         /// True if the entity is alive, false otherwise.

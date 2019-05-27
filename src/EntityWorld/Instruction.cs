@@ -10,12 +10,12 @@ namespace EntityWorld
 
         GoRight,
 
-        SkipIfFoodLeft,
+        DoIfFoodLeft,
 
-        SkipIfFoodUp,
+        DoIfFoodUp,
 
-        SkipIfFoodDown,
+        DoIfFoodDown,
 
-        SkipIfFoodRight
+        DoIfFoodRight
     }
 }
