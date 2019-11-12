@@ -45,7 +45,7 @@ namespace EntityWorld.Host
                 //Create the world
                 var world = worldFactory.Create(parameters);
 
-                Console.WriteLine($"World created. Food location: ({world.WorldState.Food.X}, {world.WorldState.Food.Y})");
+                Console.WriteLine($"World created. Food location: ({world.WorldInfo.Food.X}, {world.WorldInfo.Food.Y})");
 
                 if (_cts.IsCancellationRequested)
                 {

@@ -4,6 +4,8 @@ namespace EntityWorld
     {
         public int Generation { get; set; }
 
-        public Instruction[] Instructions { get; set; }
+        public byte[] Instructions { get; set; }
+        
+        public byte[] Memory { get; set; }
     }
 }

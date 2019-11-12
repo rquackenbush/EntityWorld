@@ -5,9 +5,9 @@ namespace EntityWorld
     /// <summary>
     /// The state of the world
     /// </summary>
-    public class WorldState
+    public class WorldInfo
     {
-        public WorldState(Size size, Rectangle food)
+        public WorldInfo(Size size, Rectangle food)
         {
             Size = size;
             Food = food;

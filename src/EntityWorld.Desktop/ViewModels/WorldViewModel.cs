@@ -21,8 +21,8 @@ namespace EntityWorld.Desktop.ViewModels
 
         public EntityViewModel[] Entities { get; }
 
-        public Size Size => World.WorldState.Size;
+        public Size Size => World.WorldInfo.Size;
 
-        public Rectangle Food => World.WorldState.Food;
+        public Rectangle Food => World.WorldInfo.Food;
     }
 }

@@ -7,13 +7,13 @@ namespace EntityWorld
 {
     public class World
     {
-        public World(WorldState worldState, Entity[] entities)
+        public World(WorldInfo worldInfo, Entity[] entities)
         {
-            WorldState = worldState;
+            WorldInfo = worldInfo;
             Entities = entities ?? throw new ArgumentNullException(nameof(entities));
         }
 
-        public WorldState WorldState { get; }
+        public WorldInfo WorldInfo { get; }
 
         public Entity[] Entities { get; }
 

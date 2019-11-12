@@ -30,7 +30,7 @@ namespace EntityWorld.Desktop.ViewModels
 
         private async void Run()
         {
-            for (int iteration = 0; iteration < 10; iteration++)
+            for (int iteration = 0; iteration < 20; iteration++)
             {
                 await World.World.CycleAsync();
             }

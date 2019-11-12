@@ -1,4 +1,5 @@
 using System.Drawing;
+using EntityWorld.Instructions;
 using Shouldly;
 using Xunit;
 
@@ -8,32 +9,71 @@ namespace EntityWorld.Tests
     {
         //Create the world
         private readonly WorldCreationParameters _parameters = new WorldCreationParameters();
-        private readonly WorldState _worldState = new WorldState(new Size(200, 200), new Rectangle(50, 50, 10, 10));
+        private readonly WorldInfo _worldInfo = new WorldInfo(new Size(200, 200), new Rectangle(50, 50, 10, 10));
         private readonly Point StartingLocation = new Point(100, 100);
 
-        [Theory]
-        [InlineData(Instruction.GoUp, 100, 99)]
-        [InlineData(Instruction.GoDown, 100, 101)]
-        [InlineData(Instruction.GoLeft, 99, 100)]
-        [InlineData(Instruction.GoRight, 101, 100)]
-        public void MoveTests(Instruction instruction, int expectedX, int expectedY)
+        [Fact]
+        public void SetTest()
         {
             var metadata = new EntityMetadata
             {
-                Generation = 0,
-                Instructions = new[]
+                Instructions = new byte[]
                 {
-                    instruction,
+                    InstructionTypes.Set,
+                    0,
+                    42
+                },
+                
+                Memory = new byte[]
+                {
+                  0
                 }
             };
-
-            var entity = new Entity(_worldState, _parameters, metadata, StartingLocation);
-
-            //Perform a single instruction cycle
+            
+            var entity = new Entity(_worldInfo, _parameters, metadata, StartingLocation);
+            
+            entity.State.Memory.Get(0).ShouldBe((byte)0);
+            
             entity.Cycle();
+            
+            entity.State.Memory.Get(0).ShouldBe((byte)42);
+        }
 
-            //Make sure that we have moved correctly
-            entity.Location.ShouldBe(new Point(expectedX, expectedY));
+        [Fact]
+        public void CopyTest()
+        {
+            var metadata = new EntityMetadata
+            {
+                Instructions = new byte[]
+                {
+                    InstructionTypes.Set, 
+                    0,
+                    42,
+                    InstructionTypes.Copy,
+                    0,
+                    1
+                },
+                
+                Memory = new byte[]
+                {
+                    0, 
+                    0
+                }
+            };
+            
+            var entity = new Entity(_worldInfo, _parameters, metadata, StartingLocation);
+            
+            entity.State.Memory.Get(0).ShouldBe((byte)0);
+            entity.State.Memory.Get(1).ShouldBe((byte)0);
+            
+            entity.Cycle();
+            
+            entity.State.Memory.Get(0).ShouldBe((byte)42);
+            entity.State.Memory.Get(1).ShouldBe((byte)0);
+            
+            entity.Cycle();
+            
+            entity.State.Memory.Get(1).ShouldBe((byte)42);
         }
     }
 }

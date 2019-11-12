@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using EntityWorld.Instructions;
 using EntityWorld.Interfaces;
 
 namespace EntityWorld
@@ -22,7 +23,7 @@ namespace EntityWorld
             var food = CreateFood(parameters);
 
             //Create the shared world state.
-            var worldState = new WorldState(parameters.WorldSize, food);
+            var worldState = new WorldInfo(parameters.WorldSize, food);
 
             //Create the entities
             var entities = CreateEntities(parameters, worldState);
@@ -40,7 +41,7 @@ namespace EntityWorld
             return new Point(x, y);
         }
 
-        private Entity[] CreateEntities(WorldCreationParameters parameters, WorldState worldState)
+        private Entity[] CreateEntities(WorldCreationParameters parameters, WorldInfo worldInfo)
         {
             //Allocate space to store the entities.
             var entities = new List<Entity>(parameters.NumberOfEntities);
@@ -55,7 +56,7 @@ namespace EntityWorld
                     existingEntity.Generation++;
 
                     //Create the entity to wrap the metadata
-                    var entity = new Entity(worldState, parameters, existingEntity, GenerateEntityLocation(parameters));
+                    var entity = new Entity(worldInfo, parameters, existingEntity, GenerateEntityLocation(parameters));
 
                     //Add it to the list
                     entities.Add(entity);
@@ -74,15 +75,10 @@ namespace EntityWorld
             //Create the entities
             for (int entityIndex = 0; entityIndex < numberOfEntitiesToCreate; entityIndex++)
             {
-                var metadata = new EntityMetadata
-                {
-                    Generation = 0,
-                    Instructions = GenerateInstructions(parameters)
-                };
-
-
+                var metadata = GenerateEntityMetadata(parameters, 0);
+                
                 //Create the entity
-                var entity = new Entity(worldState, parameters, metadata, GenerateEntityLocation(parameters));
+                var entity = new Entity(worldInfo, parameters, metadata, GenerateEntityLocation(parameters));
 
                 entities.Add(entity);
             }
@@ -108,18 +104,57 @@ namespace EntityWorld
             return new Rectangle(new Point(foodX, foodY), parameters.FoodSize);
         }
 
-        private Instruction[] GenerateInstructions(WorldCreationParameters parameters)
+        private EntityMetadata GenerateEntityMetadata(WorldCreationParameters parameters, int generation)
         {
-            var instructions = new Instruction[parameters.NumberOfInstructions];
+            //var instructions = new Instruction[parameters.NumberOfInstructions];
 
             //Create the instructions
-            for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
-            {
-                //Create the instruction
-                instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.DoIfFoodRight + 1);
-            }
+//            for (int instructionIndex = 0; instructionIndex < parameters.NumberOfInstructions; instructionIndex++)
+//            {
+//                //Create the instruction
+//                instructions[instructionIndex] = (Instruction) _randomNumberGenerator.Next(0, (int) Instruction.DoIfFoodRight + 1);
+//            }
+//
+//            return instructions;
 
-            return instructions;
+            return new EntityMetadata
+            {
+                Instructions = new byte[]
+                {
+                    // Initialize
+                    InstructionTypes.Set, 4, 0,
+                    InstructionTypes.Set, 5, 0,
+                    InstructionTypes.Set, 6, 0,
+                    InstructionTypes.Set, 7, 0,
+                    
+                    //Up
+                    
+                    // Down
+                    
+                    // Left
+                    
+                    // Right
+                    
+                    
+                },
+                
+                Memory = new byte[]
+                {
+                    0, //[0] Is food up?
+                    0, //[1] Is food down
+                    0, //[2] Is food left?
+                    0, //[3] Is food right?
+                    0, //[4] Move up
+                    0, //[5] Move down
+                    0, //[6] Move left
+                    0  //[7] Move right
+                }
+            };
+
+//            return new byte[]
+//            {
+//                //InstructionTypes.Copy
+//            };
 
 //              return new []
 //              {
